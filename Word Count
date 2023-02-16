@@ -1,0 +1,8 @@
+with open("mazher.txt", "r") as file:
+    data = file.read()
+    word_count =len(data.split())
+    print("word_count :", word_count)
+    
+    Exercise 1: Word Count
+
+Write a Python program that reads a file, counts the number of words in it, and prints the word count to the console.
