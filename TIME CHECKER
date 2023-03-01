@@ -1,0 +1,15 @@
+import time
+timestamp = time.strftime('%H:%M:%S')
+hourshand = int(time.strftime('%H'))
+minuteshand = int(time.strftime('%M'))
+secondshand = int(time.strftime('%S'))
+print(timestamp)
+
+if 5==hourshand or hourshand <=11 and minuteshand <= 59:
+    print("good morning")
+elif 12==hourshand or hourshand<=16 and   minuteshand <= 59:
+    print("Good Afternoon")
+elif 17==hourshand or hourshand<=21 and   minuteshand <= 59:
+    print("Good evening")
+else:
+    print('Good night ')
