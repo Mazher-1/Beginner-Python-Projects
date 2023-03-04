@@ -1,0 +1,97 @@
+import tkinter
+from tkinter import *
+
+
+
+
+
+
+
+def delete_t():
+    task = str(list_box.get(ANCHOR))
+    if task in task_list:
+        task_list.remove(task)
+        with open("key.txt", "w") as taskfile:
+            for task in task_list:
+                taskfile.write(task + "\n")
+        list_box.delete(ANCHOR)
+
+def addtask():
+    task= task_entry.get()
+    task_entry.delete(0,END)
+
+    if task:
+        with open('key.txt',"a")as task_file:
+            task_file.write(f"\n{task}")
+        task_list.append(task)
+        list_box.insert(END,task)
+
+def open_TaskFile():
+    with open("key.txt", "r") as taskfile:
+        tasks = taskfile.readlines()
+    for task in tasks:
+        if task != "\n":
+            task_list.append(task)
+            list_box.insert(END, task)
+
+window =Tk()
+
+
+
+
+
+
+
+
+window.title("To-Do List")
+window.geometry("400x650+400+100")
+window.resizable(False,False)
+
+task_list =[]
+#icon
+icon_img =PhotoImage(file="task.png")
+window.iconphoto(False,icon_img)
+
+#Top bar
+top_image =PhotoImage(file="topbar.png")
+Label(window,image=top_image ).pack()
+
+doc_image=PhotoImage(file="dock.png")
+Label(window,image=doc_image,bg="#32405b").place(x=30,y=25)
+
+note_img =PhotoImage(file='task.png')
+Label(window,image=note_img , bg="#32405b").place(x=30,y=25)
+
+heading=Label(window,text="ALL TASK",font=('Arial',25),fg='white',bg="#32405b",)
+heading.place(x=120,y=20)
+
+#main
+frame = Frame(window,width=400,height=50,bg="white")
+frame.place(x=0,y=180)
+task=StringVar()
+task_entry=Entry(frame,width=18,font=("arial",18),bd=0)
+task_entry.place(x=10,y=7)
+task_entry.focus()
+
+button =Button(window,text='ADD',font=('arial ',20),width=6,bg="#5a95ff",fg="#fff",bd=0,command=addtask)
+button.place(x=300,y=175)
+
+#List box
+frame1 = Frame(window,bd=3,width=700,height=280,bg="#32405b")
+frame1.pack(pady=(160,0))
+
+list_box= Listbox(frame1,font=('arial',12),width=40,height=16,bg="#32405b",fg="white",cursor="hand2",selectbackground="#5a95ff",)
+list_box.pack(side=LEFT , fill=BOTH, padx=2 )
+scroll_bar = Scrollbar(frame1)
+scroll_bar.pack(side=RIGHT,fill=BOTH)
+
+list_box.config(yscrollcommand=scroll_bar.set)
+scroll_bar.config(command=list_box.yview)
+
+open_TaskFile()
+
+#delete
+Delete_img =PhotoImage(file="delete.png")
+Button(window,image=Delete_img,bd=0,command=delete_t).pack(side=BOTTOM,pady=13)
+
+window.mainloop()
