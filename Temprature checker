@@ -1,0 +1,28 @@
+temprature =int(input("What is the temperature in degrees Fahrenheit? : "))
+humid =int(input("What is the humidity percentage? :"))
+wind=int(input("What is the wind speed in miles per hour? : "))
+
+if temprature > 90:
+    temp ="HOT"
+elif temprature > 70:
+    temp ="WARM"
+else:
+    temp = "COLD"
+
+if humid > 70:
+    humidity_level ="HUMID"
+elif humid > 50:
+    humidity_level ="MODERATE HUMID"
+else:
+    humidity_level = "DRY"
+
+if wind > 20:
+    wind_1 ="Windy"
+elif wind > 10:
+    wind_1 ="Breezy"
+else:
+    wind_1 = "Calm"
+
+print("It's "+ temp +" and "+humidity_level+" with a "+wind_1+" breeze.")
+
+#IDK KNOW HOW THIS PROGRAM WORKS BUT I AM GOING BYEEE!!
