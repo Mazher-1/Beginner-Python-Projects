@@ -1,0 +1,7 @@
+from instabot import Bot
+bot=Bot()
+bot.login(username="i._.am._.mazher",password="mazher2306")
+bot.follow("instantbollywood") # It will follow the user
+bot.upload_photo("",#Caption here ,) #Paste the path of photo here
+bot.unfollow("instantbollywoo")#It will unfollow the specific users
+bot.send_message("Hi How are you "["instantbollywood"])
