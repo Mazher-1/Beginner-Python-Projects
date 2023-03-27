@@ -1,0 +1,134 @@
+from tkinter import *
+from PIL import Image, ImageTk
+import random
+
+# Movies list:
+action_m = [
+    "The Dark Knight (2008)",
+    "The Bourne Ultimatum (2007)",
+    "Mission: Impossible ",
+    "The Raid: Redemption (2011)",
+    "Edge of Tomorrow (2014)",
+    "The Secret Service (2014)",
+    "Deadpool (2016)",
+    "Wonder Woman (2017)",
+    "Black Panther (2018)",
+    "Avengers: Infinity War (2018)",
+    "Mission: Impossible - Fallout (2018)",
+    "John Wick: Chapter 3 ",
+    "Spider-Man: Far From Home (2019)",
+    "Extraction (2020)"
+]
+
+adventure_movies = [
+    "Indiana Jones and the Raiders of the Lost Ark",
+    "The Goonies",
+    "The Lord of the Rings: ",
+    "Jurassic Park",
+    "The Curse of the Black Pearl",
+    "National Treasure",
+    "The Mummy",
+    "Avatar",
+    "Back to the Future",
+    "Star Wars: A New Hope"
+]
+
+horror = [
+    "The Exorcist",
+    "The Shining",
+    "Psycho",
+    "The Babadook",
+    "Hereditary",
+    "The Conjuring",
+    "A Quiet Place",
+    "Get Out",
+    "It",
+    "The Silence of the Lambs"
+]
+
+romantic_movies = [
+    "The Notebook",
+    "Titanic",
+    "Romeo and Juliet",
+    "La La Land",
+    "The Fault in Our Stars",
+    "A Walk to Remember",
+    "Crazy Rich Asians",
+    "The Twilight Saga",
+    "The Vow",
+    "Notting Hill"
+]
+
+# Command
+def button_1():
+    random_movie = random.choice(action_m)
+    # Display the selected movie
+    movie_label.config(text=f"The selected movie is:\n{random_movie}")
+
+def button_2():
+    random_movie = random.choice(adventure_movies)
+    # Display the selected movie
+    movie_label.config(text=f"The selected movie is:\n{random_movie}")
+
+def button_3():
+    random_movie = random.choice(horror)
+    # Display the selected movie
+    movie_label.config(text=f"The selected movie is:\n{random_movie}")
+
+def button_4():
+    random_movie = random.choice(romantic_movies)
+    # Display the selected movie
+    movie_label.config(text=f"The selected movie is:\n{random_movie}")
+
+
+window = Tk()
+window.title("Movie Selector")
+window.geometry("375x500")
+window.minsize(375, 500)
+window.maxsize(375, 500)
+
+
+
+# Open and resize the image
+image = Image.open("Cinema_Background.png")
+image = image.resize((373, 500))
+
+# Convert the image to a Tkinter-compatible format
+tk_image = ImageTk.PhotoImage(image)
+
+# Create a Label widget to display the image
+image_label = Label(window, image=tk_image,width=370)
+
+# Place the Label widget at the desired position
+image_label.place(x=0, y=0)
+
+# Text
+label = Label(window, text="Select a movie category", fg="red", font=("HACK", 17))
+label.place(x=22, y=25)
+
+
+# Create a Label widget to display the selected movie
+movie_label = Label(window, text="", fg="black", font=("Hack", 10), bg="white",
+                    borderwidth=2, relief="groove")
+movie_label.place(x=3, y=400, width=370, height=50)
+
+#Buttons
+button1 = Button(window,text="Action",font=("Hack",15),bg="gray", fg="white",command=button_1)
+button1.place(x=60,y=73)
+
+button2 = Button(window,text="Adventure",font=("Hack",15),bg="gray", fg="white",command=button_2)
+button2.place(x=50,y=151)
+
+button3 = Button(window,text="Horror",font=("Hack",15),bg="gray", fg="white",command=button_3)
+button3.place(x=230,y=70)
+
+button4 = Button(window,text="Romance",font=("Hack",15),bg="gray", fg="white",command=button_4)
+button4.place(x=225,y=150)
+
+
+
+
+# Display the window
+window.mainloop()
+
+
