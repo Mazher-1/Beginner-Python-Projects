@@ -1,0 +1,20 @@
+import time
+num_correct = 0
+
+print("Welcome to MH Quiz")
+time.sleep(3)
+
+one =("When pakistan came into being ?")
+option =["( 1947","1933","1977","1965  ) :"]
+user =input(one+ " " + " ".join(option))
+if user == "1947":
+    num_correct+=1
+
+second = ("Which language is best ? ")
+option = ["( java", "C++", "HTML", "python ) :"]
+user = input(one + " " + " ".join(option))
+if user.lower == "python":
+    num_correct += 1
+
+
+print("You got", num_correct, "out of 2 questions correct.")
