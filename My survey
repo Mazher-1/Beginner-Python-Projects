@@ -1,0 +1,12 @@
+import time
+
+print("Welcome to my Survey ")
+
+
+email =input("Enter your email : ")
+passw =input("Enter your password: ")
+name=input("Enter your name : ")
+age =input("Enter your age : ")
+date =input("Enter your date of birth  : ")
+
+print(f"Hey thanks  {name} for filling out the form , Please make sure to read our mail of news on every day ")
