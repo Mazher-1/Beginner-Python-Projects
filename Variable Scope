@@ -1,0 +1,9 @@
+x = 2
+
+def function_1():
+    global y
+    y = 2
+
+function_1()
+z = x + y
+print(z)
