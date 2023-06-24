@@ -1,0 +1,7 @@
+dollar = int(input('How much dollar you have : '))
+if dollar >= 1500 :
+    text = "You have only {} dollar in your pocket ! YOU ARE RICH MAN "
+    print(text.format(dollar))
+else :
+    text = "You have only {} dollar in your pocket ! BROKIE "
+    print(text.format(dollar))
