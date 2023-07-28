@@ -1,0 +1,9 @@
+import time
+import pyautogui
+time.sleep(1)
+for i in  range(6):
+
+    pyautogui.moveRel(300 , 0 , duration=0.2)
+    pyautogui.moveRel(0, 300 , duration=0.2)
+    pyautogui.moveRel(-300, 0, duration=0.2)
+    pyautogui.moveRel(0, -300, duration=0.2)
