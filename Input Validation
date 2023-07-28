@@ -1,0 +1,5 @@
+import pyinputplus as pip
+
+print('What is your Favorite Language ? : ' )
+user_input = pip.inputMenu(["Python", "Java", "C#"])
+print("user Chose : " + user_input)
