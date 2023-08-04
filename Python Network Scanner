@@ -1,0 +1,21 @@
+#Python Network Scanner
+
+from socket import *
+
+import time
+
+start = time.time()
+
+target = input("Enter the Host to be Scanned : ")
+t_ip = gethostbyname(target)
+print("Starting scan a host" , t_ip)
+
+for i in range(50 , 200):
+    print('Checking port' + str(i))
+    s =socket(AF_INET , SOCK_STREAM)
+    conn = s.connect_ex((t_ip , i))
+    if (conn == 0):
+        print(f'Port {i}: OPEN ')
+    s.close()
+
+print("Time Taken : ",  time.time() - start)
