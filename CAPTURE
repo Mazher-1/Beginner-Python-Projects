@@ -1,0 +1,11 @@
+import cv2
+
+imgcapute = cv2.VideoCapture(0)
+result = True
+
+while(result):
+    ret, frame = imgcapute.read()
+    cv2.imwrite("test.jpg", frame)
+    result = False
+    print("Image Captured...")
+imgcapute.release()
