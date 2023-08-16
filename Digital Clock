@@ -1,0 +1,55 @@
+from tkinter import *
+from datetime import datetime
+from time import strftime
+from PIL import ImageTk, Image
+
+w = Tk()
+w.geometry('820x200')
+w.minsize(820, 200)
+w.title("Digital Clock")
+
+f1 = Frame(w, width=820, height=200, bg='#0e1013')
+f1.place(x=0, y=0)
+
+
+
+a = datetime.today().strftime("%A")
+b = a.upper()
+c = b[0:2]
+
+
+def time():
+    a = strftime('%H  :  %M  :   %S')
+    l1.config(text=a)
+    l1.after(1000, time)
+
+
+l1 = Label(f1, font=("Century Gothic", 60), bg='#0e1013', foreground='#d3d3d3')
+l1.place(x=270, y=35)
+
+time()
+
+l2 = Label(f1, font=("Century Gothic", 60), bg='#0e1013', foreground='#d3d3d3')
+
+l2.config(text=c + '   |')
+l2.place(x=80, y=35)
+
+
+def label():
+    l3 = Label(f1, font=('Century Gothic', 8), bg='#0e1013', fg='#7f7f7f', text="DAY")
+    l3.place(x=122, y=130)
+
+    l3 = Label(f1, font=('Century Gothic', 8), bg='#0e1013', fg='#7f7f7f', text='HOURS')
+    l3.place(x=320, y=130)
+
+    l3 = Label(f1, font=('Century Gothic', 8), bg='#0e1013', fg='#7f7f7f', text="MINUTES")
+    l3.place(x=445 + 45, y=130)
+
+    l3 = Label(f1, font=('Century Gothic', 8), bg='#0e1013', fg='#7f7f7f', text="SECONDS")
+    l3.place(x=470 + 240, y=130)
+
+
+label()
+
+
+w.mainloop()
