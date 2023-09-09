@@ -1,4 +1,5 @@
 import socket
+from termcolor import colored
 
 def port_scanner(host, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -7,14 +8,12 @@ def port_scanner(host, port):
     result = sock.connect_ex((host, port))
 
     if result == 0:
-        print("Port %d is open" % (port))
+        print(colored("Port %d is open" % (port), 'green'))
     else:
-        print("Port %d is closed" % (port))
+        print(colored("Port %d is closed" % (port), 'red'))
 
     sock.close()
 
 host = '192.168.18.3'
-ports_to_scan = [443, 22, 21, 143, 443, 8080, 443, 514, 119, 53, 139, 3306, 25, 67, 68, 69, 123, 389, 636, 873, 990 ,
-                 21, 23, 25, 69, 137, 138, 139, 445, 514, 1080]
-for port in ports_to_scan:
+for port in range(1, 1000):
     port_scanner(host, port)
