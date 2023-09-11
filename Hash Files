@@ -1,0 +1,23 @@
+import hashlib
+
+hashvalue= input("Enter a string to hash: ")
+
+#For MD5
+hashobj1 = hashlib.md5()
+hashobj1.update(hashvalue.encode())
+print(hashobj1.hexdigest())
+
+# For Sha:
+hashobj2 = hashlib.sha1()
+hashobj2.update(hashvalue.encode())
+print(hashobj2.hexdigest())
+
+# For Sha:
+hashobj3= hashlib.sha3_256()
+hashobj3.update(hashvalue.encode())
+print(hashobj3.hexdigest())
+
+# For Sha:
+hashobj4= hashlib.sha1()
+hashobj4.update(hashvalue.encode())
+print(hashobj4.hexdigest())
