@@ -1,0 +1,21 @@
+import hashlib
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def crack_password(target_hash, wordlist_file):
+    with open(wordlist_file, "r", encoding="utf-8", errors="ignore") as file:
+        for line in file:
+            password = line.strip()
+            if hash_password(password) == target_hash:
+                print(f"Password found: {password}")
+                return
+    print("Password not found in the wordlist")
+
+target_hash = "2ef7bde608ce5404e97d5f042f95f89f1c1b9390b2"
+wordlist_file = "rockyou.txt"
+crack_password(target_hash, wordlist_file)
+
+target_hash = "2ef7bde608ce5404e97d5f042f95f89f1c1b9390b2"
+wordlist_file = "rockyou.txt"
+crack_password(target_hash, wordlist_file)
