@@ -1,0 +1,60 @@
+# Advance Network Scanner
+import socket
+
+# Scope: I need Target : Live Host Detection , Host Information ,Open Ports ,Open Ports, vulnerabilities
+
+
+#Modules
+from scapy.all import *
+import time
+import sys
+
+#Live Host Detection
+
+def live_host_detection(target_ip):
+    icmp = IP(dst=target_ip)/ICMP()
+    reply = sr1(icmp, timeout=1, verbose=False)
+    if reply:
+        print(f"[*] {target_ip} is alive")
+    else:
+        print(f"[X] {target_ip} is not responding")
+
+#Host Information
+time.sleep(2)
+def host_information(target_ip):
+    try:
+        arp_request = ARP(pdst=target_ip)
+        response = sr1(arp_request, timeout=1, verbose=False)
+        if response:
+            print(f"IP: {target_ip}")
+            print(f"MAC: {response.hwsrc}")
+            print(f"Hostname: {socket.gethostbyaddr(target_ip)[0]}")
+        else:
+            print(f"No response from {target_ip}")
+    except Exception as e:
+        print(f"Error: {e}")
+
+#  Open Ports
+
+def port_scanner(target_ip, port):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)  # Set a timeout for the connection attempt (in seconds)
+
+    result = sock.connect_ex((target_ip, port))
+
+    if result == 0:
+        print(f"Port {port} is open")
+
+    sock.close()
+
+target_ip = "192.168.18.3" # Replace with your target IP
+ports_to_scan = range(1, 100)
+live_host_detection(target_ip)
+host_information(target_ip)
+
+
+for port in ports_to_scan:
+    sys.stdout.write(f"\rScanning port {port}...   ")
+    sys.stdout.flush()
+    port_scanner(target_ip, port)
+    sys.stdout.write("\r" + " " * 50 + "\r")  # Clear the loading message
