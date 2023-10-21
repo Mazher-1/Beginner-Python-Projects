@@ -1,0 +1,12 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://example.com/news"
+response = requests.get(url)
+
+soup = BeautifulSoup(response.text, 'html.parser')
+
+article_titles = soup.select('h3')
+
+for title in article_titles:
+    print(title.text)
